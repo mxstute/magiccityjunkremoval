@@ -139,9 +139,9 @@ function WhatWeHaul() {
 
 function Pricing() {
   const tiers = [
-    { name: "Single Item", price: "$79+", desc: "One large item pickup", items: ["1 large item (couch, mattress, appliance)", "Loading & hauling included", "Same-day available"], highlight: false },
-    { name: "Partial Load", price: "$249+", desc: "Up to half a truck", items: ["Fills roughly half a standard truck", "Great for small cleanouts", "Multiple item types accepted", "Eco-friendly disposal"], highlight: true },
-    { name: "Full Load", price: "$449+", desc: "Full truckload", items: ["Entire truck bed loaded", "Garage & estate cleanouts", "Construction debris welcome", "Priority scheduling"], highlight: false },
+    { name: "Half Truck Load", price: "$299+", desc: "Small cleanouts & multiple items", items: ["Fills roughly half a standard truck", "Furniture, appliances, debris", "Multiple item types accepted", "Eco-friendly disposal"], highlight: false },
+    { name: "Full Truck Load", price: "$549+", desc: "Full truckload", items: ["Entire truck bed loaded", "Garage & estate cleanouts", "Construction debris welcome", "Same-day available", "Priority scheduling"], highlight: true },
+    { name: "Complete Cleanout", price: "$849+", desc: "Multi-room / whole property", items: ["Multi-room or full property cleanout", "Estate & foreclosure specialists", "Commercial cleanouts available", "Donation coordination included", "Broom-clean guarantee"], highlight: false },
   ];
 
   return (
