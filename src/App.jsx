@@ -23,17 +23,22 @@ function PhoneBtn({ full = false }) {
 }
 
 function Nav() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const links = [
+    { label: "What We Haul", href: "#haul" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "How It Works", href: "#process" },
+    { label: "Book Now", href: "#book" },
+  ];
+  const linkStyle = { color: LIGHT, fontFamily: "'Outfit',sans-serif", fontSize: 13, fontWeight: 500, letterSpacing: 1.5, textDecoration: "none", textTransform: "uppercase", transition: "color 0.2s" };
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
       background: "rgba(11,17,32,0.95)", backdropFilter: "blur(20px)",
       borderBottom: "1px solid rgba(244,114,182,0.08)",
     }}>
-      <div style={{
-        maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center",
-        justifyContent: "space-between", height: 64, padding: "0 max(20px,4vw)",
-      }}>
-        <a href="#top" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", height: 68, padding: "0 max(20px,4vw)" }}>
+        <a href="#top" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10, justifySelf: "start" }}>
           <div style={{ width: 34, height: 34, borderRadius: 8, background: PINK, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ display: "flex", gap: 2, alignItems: "flex-end", height: 16 }}>
               {[10, 14, 12, 16, 13].map((h, i) => (
@@ -46,8 +51,30 @@ function Nav() {
             <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 8, fontWeight: 400, color: BLUE, letterSpacing: 3, lineHeight: 1.1 }}>JUNK REMOVAL</div>
           </div>
         </a>
-        <PhoneBtn />
+        <div className="nav-center-links" style={{ display: "flex", alignItems: "center", gap: 36 }}>
+          {links.map(l => (
+            <a key={l.label} href={l.href} style={linkStyle}
+              onMouseEnter={e => e.target.style.color = PINK}
+              onMouseLeave={e => e.target.style.color = LIGHT}>{l.label}</a>
+          ))}
+        </div>
+        <div style={{ justifySelf: "end", display: "flex", alignItems: "center", gap: 16 }}>
+          <a href={`tel:${PHONE.replace(/\D/g, "")}`} className="nav-phone-btn" style={{
+            display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px",
+            background: PINK, color: "#fff", border: "none", borderRadius: 50,
+            fontFamily: "'Outfit',sans-serif", fontSize: 14, fontWeight: 600, textDecoration: "none",
+          }}>📞 {PHONE}</a>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="mobile-menu-btn" style={{
+            display: "none", background: "none", border: "none", color: LIGHT, fontSize: 26, cursor: "pointer", padding: 4,
+          }}>{menuOpen ? "✕" : "☰"}</button>
+        </div>
       </div>
+      {menuOpen && (
+        <div className="mobile-menu" style={{ padding: "20px 0 28px", display: "flex", flexDirection: "column", gap: 20, alignItems: "center", background: "rgba(11,17,32,0.98)", borderTop: "1px solid rgba(244,114,182,0.1)" }}>
+          {links.map(l => (<a key={l.label} href={l.href} onClick={() => setMenuOpen(false)} style={{ ...linkStyle, fontSize: 15 }}>{l.label}</a>))}
+          <a href={`tel:${PHONE.replace(/\D/g, "")}`} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", background: PINK, color: "#fff", borderRadius: 50, fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 600, textDecoration: "none" }}>📞 {PHONE}</a>
+        </div>
+      )}
     </nav>
   );
 }
@@ -55,12 +82,12 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" style={{
-      minHeight: "100vh", display: "flex", alignItems: "center",
+      minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
       background: `linear-gradient(165deg, ${DARK} 0%, #0F1B2E 40%, #1A1035 100%)`,
       position: "relative", overflow: "hidden", padding: "100px max(20px,4vw) 60px",
     }}>
       <div style={{ position: "absolute", top: "8%", right: "-8%", width: "55vw", height: "55vw", background: `radial-gradient(circle, rgba(244,114,182,0.07) 0%, transparent 70%)`, borderRadius: "50%" }} />
-      <div style={{ maxWidth: 720, position: "relative", zIndex: 1 }}>
+      <div style={{ maxWidth: 800, position: "relative", zIndex: 1, textAlign: "center" }}>
         <div style={{
           display: "inline-block", padding: "5px 16px", borderRadius: 50,
           border: "1px solid rgba(244,114,182,0.25)", marginBottom: 24,
@@ -75,11 +102,11 @@ function Hero() {
           background: `linear-gradient(135deg, ${PINK}, ${BLUE})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
         }}>Junk Removal in Miami</h1>
 
-        <p style={{ fontFamily: "'Outfit',sans-serif", fontSize: "clamp(15px,1.8vw,19px)", color: GRAY, lineHeight: 1.7, maxWidth: 540, marginBottom: 32 }}>
+        <p style={{ fontFamily: "'Outfit',sans-serif", fontSize: "clamp(15px,1.8vw,19px)", color: GRAY, lineHeight: 1.7, maxWidth: 540, margin: "0 auto 32px" }}>
           From garage cleanouts to construction debris — we haul it all away, same day. No hidden fees, no hassle. Just a clean space and a fair price.
         </p>
 
-        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 48 }}>
+        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 48, justifyContent: "center" }}>
           <PhoneBtn />
           <a href="#pricing" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "16px 32px",
@@ -88,9 +115,9 @@ function Hero() {
           }}>See Pricing ↓</a>
         </div>
 
-        <div style={{ display: "flex", gap: 36, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 36, flexWrap: "wrap", justifyContent: "center" }}>
           {[{ v: "Same Day", l: "Service Available" }, { v: "No", l: "Hidden Fees" }, { v: "All", l: "Junk Types" }].map(s => (
-            <div key={s.l}>
+            <div key={s.l} style={{ textAlign: "center" }}>
               <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 24, fontWeight: 700, color: LIGHT }}>{s.v}</div>
               <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, color: GRAY, letterSpacing: 1, textTransform: "uppercase" }}>{s.l}</div>
             </div>
@@ -112,7 +139,7 @@ function WhatWeHaul() {
   ];
 
   return (
-    <section style={{ background: DARK2, padding: "80px max(20px,4vw)" }}>
+    <section id="haul" style={{ background: DARK2, padding: "80px max(20px,4vw)" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>What We Haul</div>
@@ -202,7 +229,7 @@ function Process() {
     { n: "04", t: "Done & Gone", d: "Your junk disappears. We donate and recycle what we can." },
   ];
   return (
-    <section style={{ background: DARK2, padding: "80px max(20px,4vw)" }}>
+    <section id="process" style={{ background: DARK2, padding: "80px max(20px,4vw)" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>How It Works</div>
@@ -567,8 +594,16 @@ export default function JunkRemovalPage() {
         *,*::before,*::after{box-sizing:border-box;margin:0}
         html{scroll-behavior:smooth}body{background:${DARK}}
         ::selection{background:${PINK}44;color:#fff}
+        @media (max-width: 768px) {
+          .nav-center-links { display: none !important; }
+          .mobile-menu-btn { display: block !important; }
+          .nav-phone-btn { display: none !important; }
+        }
+        @media (min-width: 769px) {
+          .mobile-menu { display: none !important; }
+        }
       `}</style>
-      <Nav /><Hero /><WhatWeHaul /><BookingSystem /><Pricing /><Process /><Areas /><CTA /><Footer />
+      <Nav /><Hero /><WhatWeHaul /><Pricing /><BookingSystem /><Process /><Areas /><CTA /><Footer />
     </>
   );
 }
