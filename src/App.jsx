@@ -37,7 +37,7 @@ function Nav() {
       background: "rgba(11,17,32,0.95)", backdropFilter: "blur(20px)",
       borderBottom: "1px solid rgba(244,114,182,0.08)",
     }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", height: 68, padding: "0 max(20px,4vw)" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", height: 68, padding: "0 24px" }}>
         <a href="#top" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10, justifySelf: "start" }}>
           <div style={{ width: 34, height: 34, borderRadius: 8, background: PINK, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ display: "flex", gap: 2, alignItems: "flex-end", height: 16 }}>
@@ -84,7 +84,7 @@ function Hero() {
     <section id="top" style={{
       minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
       background: `linear-gradient(165deg, ${DARK} 0%, #0F1B2E 40%, #1A1035 100%)`,
-      position: "relative", overflow: "hidden", padding: "100px max(20px,4vw) 60px",
+      position: "relative", overflow: "hidden", padding: "100px 24px 60px",
     }}>
       <div style={{ position: "absolute", top: "8%", right: "-8%", width: "55vw", height: "55vw", background: `radial-gradient(circle, rgba(244,114,182,0.07) 0%, transparent 70%)`, borderRadius: "50%" }} />
       <div style={{ maxWidth: 800, position: "relative", zIndex: 1, textAlign: "center" }}>
@@ -139,7 +139,7 @@ function WhatWeHaul() {
   ];
 
   return (
-    <section id="haul" style={{ background: DARK2, padding: "80px max(20px,4vw)" }}>
+    <section id="haul" style={{ background: DARK2, padding: "80px 24px" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>What We Haul</div>
@@ -172,7 +172,7 @@ function Pricing() {
   ];
 
   return (
-    <section id="pricing" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 100%)`, padding: "80px max(20px,4vw)" }}>
+    <section id="pricing" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 100%)`, padding: "80px 24px" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>Transparent Pricing</div>
@@ -229,7 +229,7 @@ function Process() {
     { n: "04", t: "Done & Gone", d: "Your junk disappears. We donate and recycle what we can." },
   ];
   return (
-    <section id="process" style={{ background: DARK2, padding: "80px max(20px,4vw)" }}>
+    <section id="process" style={{ background: DARK2, padding: "80px 24px" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>How It Works</div>
@@ -259,7 +259,7 @@ function Process() {
 function Areas() {
   const a = ["Miami", "Miami Beach", "Coral Gables", "Hialeah", "Doral", "Kendall", "Homestead", "Aventura", "North Miami", "Brickell", "Wynwood", "Coconut Grove", "Key Biscayne", "Pinecrest", "Palmetto Bay", "Little Havana"];
   return (
-    <section style={{ background: DARK, padding: "80px max(20px,4vw)" }}>
+    <section style={{ background: DARK, padding: "80px 24px" }}>
       <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
         <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>Service Area</div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,38px)", fontWeight: 700, color: LIGHT, margin: "0 0 24px" }}>Junk Removal Across Miami-Dade</h2>
@@ -278,7 +278,7 @@ function Areas() {
 
 function CTA() {
   return (
-    <section style={{ background: `linear-gradient(135deg, ${PINK}22, ${BLUE}11)`, padding: "80px max(20px,4vw)" }}>
+    <section style={{ background: `linear-gradient(135deg, ${PINK}22, ${BLUE}11)`, padding: "80px 24px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>🚛</div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,40px)", fontWeight: 700, color: LIGHT, margin: "0 0 12px" }}>Ready to Clear the Clutter?</h2>
@@ -296,7 +296,7 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer style={{ background: DARK, padding: "40px max(20px,4vw) 20px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+    <footer style={{ background: DARK, padding: "40px 24px 20px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 700, color: PINK }}>MAGIC CITY</div>
@@ -380,8 +380,8 @@ function BookingSystem() {
 
   if (submitted) {
     return (
-      <section id="book" style={{ background: DARK2, padding: "80px max(20px,4vw)" }}>
-        <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center", background: DARK3, borderRadius: 24, padding: "48px max(20px, 4vw)", border: "1px solid rgba(244,114,182,0.15)" }}>
+      <section id="book" style={{ background: DARK2, padding: "80px 24px" }}>
+        <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center", background: DARK3, borderRadius: 24, padding: "48px clamp(20px, 5vw, 40px)", border: "1px solid rgba(244,114,182,0.15)" }}>
           <div style={{ fontSize: 56, marginBottom: 20 }}>🎉</div>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 32, fontWeight: 700, color: LIGHT, margin: "0 0 12px" }}>Booking Confirmed!</h2>
           <p style={{ fontFamily: "'Outfit',sans-serif", fontSize: 16, color: GRAY, lineHeight: 1.7, marginBottom: 8 }}>
@@ -398,7 +398,7 @@ function BookingSystem() {
   }
 
   return (
-    <section id="book" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 100%)`, padding: "80px max(20px,4vw)" }}>
+    <section id="book" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 100%)`, padding: "80px 24px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>Get Started</div>
@@ -414,7 +414,7 @@ function BookingSystem() {
 
         {/* ====== BOOK TAB ====== */}
         {tab === "book" && (
-          <div style={{ background: DARK3, borderRadius: 24, padding: "28px max(16px, 4vw)", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
+          <div style={{ background: DARK3, borderRadius: 24, padding: "28px clamp(16px, 5vw, 32px)", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
             {/* Progress */}
             <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
               {["Package", "Date & Time", "Your Info"].map((s, i) => (
@@ -517,7 +517,7 @@ function BookingSystem() {
 
         {/* ====== QUOTE TAB ====== */}
         {tab === "quote" && (
-          <div style={{ background: DARK3, borderRadius: 24, padding: "28px max(16px, 4vw)", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
+          <div style={{ background: DARK3, borderRadius: 24, padding: "28px clamp(16px, 5vw, 32px)", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
             {quoteSubmitted ? (
               <div style={{ textAlign: "center", padding: "40px 0" }}>
                 <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
@@ -558,7 +558,7 @@ function BookingSystem() {
 
         {/* ====== CALL TAB ====== */}
         {tab === "call" && (
-          <div style={{ background: DARK3, borderRadius: 24, padding: "40px max(16px, 4vw)", border: "1px solid rgba(255,255,255,0.04)", textAlign: "center" }}>
+          <div style={{ background: DARK3, borderRadius: 24, padding: "40px clamp(16px, 5vw, 32px)", border: "1px solid rgba(255,255,255,0.04)", textAlign: "center" }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>📞</div>
             <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 26, fontWeight: 700, color: LIGHT, margin: "0 0 12px" }}>Talk to Us Now</h3>
             <p style={{ fontFamily: "'Outfit',sans-serif", fontSize: 15, color: GRAY, lineHeight: 1.7, marginBottom: 28, maxWidth: 380, margin: "0 auto 28px" }}>
