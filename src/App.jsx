@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const PINK = "#F472B6";
 const BLUE = "#7DD3FC";
@@ -604,6 +605,7 @@ export default function JunkRemovalPage() {
         }
       `}</style>
       <Nav /><Hero /><WhatWeHaul /><Pricing /><BookingSystem /><Process /><Areas /><CTA /><Footer />
+      <Analytics />
     </>
   );
 }
