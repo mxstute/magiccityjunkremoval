@@ -209,9 +209,11 @@ function WhatWeHaul() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
           {items.map(it => (
             <div key={it.title} style={{
-              background: DARK3, borderRadius: 16, padding: "24px 28px",
+              background: DARK3, borderRadius: 16, padding: "24px 28px", transition: "all 0.3s ease", cursor: "default",
               border: "1px solid rgba(255,255,255,0.03)", display: "flex", gap: 16, alignItems: "flex-start",
-            }}>
+            }
+            onMouseEnter={e => { e.currentTarget.style.border = "1px solid rgba(244,114,182,0.2)"; e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(244,114,182,0.12)"; }}
+            onMouseLeave={e => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.04)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
               <span style={{ fontSize: 28, flexShrink: 0 }}>{it.icon}</span>
               <div>
                 <h4 style={{ fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 600, color: LIGHT, margin: "0 0 4px" }}>{it.title}</h4>
@@ -244,10 +246,12 @@ function Pricing() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20 }}>
           {tiers.map(t => (
             <div key={t.name} style={{
-              background: DARK3, borderRadius: 20, padding: 32,
+              background: DARK3, borderRadius: 20, padding: 32, transition: "all 0.3s ease", cursor: "default",
               border: t.highlight ? `1.5px solid ${PINK}44` : "1px solid rgba(255,255,255,0.04)",
               position: "relative", overflow: "hidden",
-            }}>
+            }
+            onMouseEnter={e => { e.currentTarget.style.border = "1px solid rgba(244,114,182,0.2)"; e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(244,114,182,0.12)"; }}
+            onMouseLeave={e => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.04)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
               {t.highlight && <div style={{
                 position: "absolute", top: 14, right: -28, background: PINK, color: "#fff",
                 fontFamily: "'Outfit',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: 1,
