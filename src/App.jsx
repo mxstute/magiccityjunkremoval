@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 const PINK = "#F472B6";
 const BLUE = "#7DD3FC";
@@ -18,107 +18,7 @@ function PhoneBtn({ full = false }) {
       background: ACCENT, color: "#fff", border: "none", borderRadius: 50,
       fontFamily: "'Outfit',sans-serif", fontSize: 17, fontWeight: 700,
       textDecoration: "none", letterSpacing: 0.5, width: full ? "100%" : "auto", justifyContent: "center",
-      transition: "all 0.2s ease",
-    }}
-    onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(244,114,182,0.35)"; }}
-    onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}>📞 {PHONE}</a>
-  );
-}
-
-
-// Google Places Autocomplete
-const GOOGLE_MAPS_KEY = "AIzaSyAMDTN_tRU_MIKTh29BHZvrWRdOaYHZc98";
-
-function useGooglePlaces() {
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    if (!GOOGLE_MAPS_KEY || GOOGLE_MAPS_KEY === "REPLACE_ME") return;
-    if (window.google?.maps?.places) { setLoaded(true); return; }
-    if (document.querySelector('script[src*="maps.googleapis"]')) return;
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_KEY}&libraries=places`;
-    script.async = true;
-    script.onload = () => { try { if (window.google?.maps?.places) setLoaded(true); } catch(e) {} };
-    script.onerror = (e) => { console.warn("Google Maps script failed to load:", e); };
-    document.head.appendChild(script);
-  }, []);
-  return loaded;
-}
-
-function AddressAutocomplete({ label, value, onChange, placeholder = "Start typing your address..." }) {
-  const [query, setQuery] = useState(value || "");
-  const [suggestions, setSuggestions] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const serviceRef = useRef(null);
-  const wrapperRef = useRef(null);
-  const placesLoaded = useGooglePlaces();
-
-  useEffect(() => {
-    if (placesLoaded && !serviceRef.current) {
-      try { serviceRef.current = new window.google.maps.places.AutocompleteService(); } catch(e) {}
-    }
-  }, [placesLoaded]);
-
-  useEffect(() => {
-    if (value && value !== query) setQuery(value);
-  }, [value]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => { if (wrapperRef.current && !wrapperRef.current.contains(e.target)) setShowDropdown(false); };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    return () => { document.removeEventListener("mousedown", handleClickOutside); document.removeEventListener("touchstart", handleClickOutside); };
-  }, []);
-
-  const handleInput = (val) => {
-    setQuery(val);
-    onChange(val);
-    if (!serviceRef.current || val.length < 3) { setSuggestions([]); setShowDropdown(false); return; }
-    serviceRef.current.getPlacePredictions({
-      input: val,
-      componentRestrictions: { country: "us" },
-      types: ["address"],
-      locationBias: { lat: 25.76, lng: -80.19, radius: 50000 },
-    }, (predictions, status) => {
-      if (status === "OK" && predictions) {
-        setSuggestions(predictions.map(p => p.description));
-        setShowDropdown(true);
-      } else {
-        setSuggestions([]);
-        setShowDropdown(false);
-      }
-    });
-  };
-
-  const selectSuggestion = (addr) => {
-    setQuery(addr);
-    onChange(addr);
-    setSuggestions([]);
-    setShowDropdown(false);
-  };
-
-  return (
-    <div ref={wrapperRef} style={{ marginBottom: 16, position: "relative" }}>
-      <label style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: GRAY, letterSpacing: 1, textTransform: "uppercase", display: "block", marginBottom: 6 }}>{label}</label>
-      <input type="text" value={query} placeholder={placeholder}
-        onChange={e => handleInput(e.target.value)}
-        onFocus={e => { e.target.style.borderColor = PINK + "55"; if (suggestions.length) setShowDropdown(true); }}
-        onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.08)"; }}
-        autoComplete="one-time-code" autoCorrect="off" autoCapitalize="off" spellCheck="false" data-lpignore="true"
-        style={{ width: "100%", padding: "13px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)", color: LIGHT, fontFamily: "'Outfit',sans-serif", fontSize: 15, outline: "none", boxSizing: "border-box" }} />
-      {showDropdown && suggestions.length > 0 && (
-        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 9999, background: "#1E293B", border: "1px solid rgba(244,114,182,0.15)", borderRadius: 12, marginTop: 4, boxShadow: "0 8px 32px rgba(0,0,0,0.4)", maxHeight: 220, overflowY: "auto" }}>
-          {suggestions.map((s, i) => (
-            <div key={i} onClick={() => selectSuggestion(s)} onTouchEnd={(e) => { e.preventDefault(); selectSuggestion(s); }}
-              style={{ padding: "12px 16px", cursor: "pointer", fontFamily: "'Outfit',sans-serif", fontSize: 14, color: "#CBD5E1", borderBottom: i < suggestions.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", transition: "background 0.15s" }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(244,114,182,0.08)"}
-              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-              {s}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    }}>📞 {PHONE}</a>
   );
 }
 
@@ -162,10 +62,8 @@ function Nav() {
           <a href={`tel:${PHONE.replace(/\D/g, "")}`} className="nav-phone-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px",
             background: PINK, color: "#fff", border: "none", borderRadius: 50,
-            fontFamily: "'Outfit',sans-serif", fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(244,114,182,0.35)"; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}>📞 {PHONE}</a>
+            fontFamily: "'Outfit',sans-serif", fontSize: 14, fontWeight: 600, textDecoration: "none",
+          }}>📞 {PHONE}</a>
           <button onClick={() => setMenuOpen(!menuOpen)} className="mobile-menu-btn" style={{
             display: "none", background: "none", border: "none", color: LIGHT, fontSize: 26, cursor: "pointer", padding: 4,
           }}>{menuOpen ? "✕" : "☰"}</button>
@@ -174,9 +72,7 @@ function Nav() {
       {menuOpen && (
         <div className="mobile-menu" style={{ padding: "20px 0 28px", display: "flex", flexDirection: "column", gap: 20, alignItems: "center", background: "rgba(11,17,32,0.98)", borderTop: "1px solid rgba(244,114,182,0.1)" }}>
           {links.map(l => (<a key={l.label} href={l.href} onClick={() => setMenuOpen(false)} style={{ ...linkStyle, fontSize: 15 }}>{l.label}</a>))}
-          <a href={`tel:${PHONE.replace(/\D/g, "")}`} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", background: PINK, color: "#fff", borderRadius: 50, fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease" }}
-          onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(244,114,182,0.3)"; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}>📞 {PHONE}</a>
+          <a href={`tel:${PHONE.replace(/\D/g, "")}`} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", background: PINK, color: "#fff", borderRadius: 50, fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 600, textDecoration: "none" }}>📞 {PHONE}</a>
         </div>
       )}
     </nav>
@@ -215,10 +111,8 @@ function Hero() {
           <a href="#pricing" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "16px 32px",
             background: "transparent", color: BLUE, border: `1.5px solid rgba(125,211,252,0.25)`,
-            borderRadius: 50, fontFamily: "'Outfit',sans-serif", fontSize: 16, fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.04)"; e.currentTarget.style.background = "rgba(125,211,252,0.06)"; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.background = "transparent"; }}>See Pricing ↓</a>
+            borderRadius: 50, fontFamily: "'Outfit',sans-serif", fontSize: 16, fontWeight: 600, textDecoration: "none",
+          }}>See Pricing ↓</a>
         </div>
 
         <div style={{ display: "flex", gap: 36, flexWrap: "wrap", justifyContent: "center" }}>
@@ -245,7 +139,7 @@ function WhatWeHaul() {
   ];
 
   return (
-    <section id="haul" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 30%, ${DARK2} 70%, ${DARK} 100%)`, padding: "80px 24px" }}>
+    <section id="haul" style={{ background: DARK2, padding: "80px 24px" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>What We Haul</div>
@@ -256,10 +150,7 @@ function WhatWeHaul() {
             <div key={it.title} style={{
               background: DARK3, borderRadius: 16, padding: "24px 28px",
               border: "1px solid rgba(255,255,255,0.03)", display: "flex", gap: 16, alignItems: "flex-start",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.border = "1px solid rgba(244,114,182,0.2)"; e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(244,114,182,0.12)"; }}
-            onMouseLeave={e => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.03)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
+            }}>
               <span style={{ fontSize: 28, flexShrink: 0 }}>{it.icon}</span>
               <div>
                 <h4 style={{ fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 600, color: LIGHT, margin: "0 0 4px" }}>{it.title}</h4>
@@ -281,7 +172,7 @@ function Pricing() {
   ];
 
   return (
-    <section id="pricing" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 35%, ${DARK2} 65%, ${DARK} 100%)`, padding: "80px 24px" }}>
+    <section id="pricing" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 100%)`, padding: "80px 24px" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>Transparent Pricing</div>
@@ -295,10 +186,7 @@ function Pricing() {
               background: DARK3, borderRadius: 20, padding: 32,
               border: t.highlight ? `1.5px solid ${PINK}44` : "1px solid rgba(255,255,255,0.04)",
               position: "relative", overflow: "hidden",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(244,114,182,0.12)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
+            }}>
               {t.highlight && <div style={{
                 position: "absolute", top: 14, right: -28, background: PINK, color: "#fff",
                 fontFamily: "'Outfit',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: 1,
@@ -341,7 +229,7 @@ function Process() {
     { n: "04", t: "Done & Gone", d: "Your junk disappears. We donate and recycle what we can." },
   ];
   return (
-    <section id="process" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 30%, ${DARK2} 70%, ${DARK} 100%)`, padding: "80px 24px" }}>
+    <section id="process" style={{ background: DARK2, padding: "80px 24px" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>How It Works</div>
@@ -377,9 +265,7 @@ function Areas() {
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,38px)", fontWeight: 700, color: LIGHT, margin: "0 0 24px" }}>Junk Removal Across Miami-Dade</h2>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 24 }}>
           {a.map(x => (
-            <span key={x} style={{ padding: "7px 16px", borderRadius: 50, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 500, color: "#CBD5E1", transition: "all 0.25s ease", cursor: "default" }}
-              onMouseEnter={e => { e.currentTarget.style.border = "1px solid rgba(244,114,182,0.35)"; e.currentTarget.style.background = "rgba(244,114,182,0.06)"; e.currentTarget.style.color = "#F472B6"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={e => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.05)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; e.currentTarget.style.color = "#CBD5E1"; e.currentTarget.style.transform = "translateY(0)"; }}>{x}</span>
+            <span key={x} style={{ padding: "7px 16px", borderRadius: 50, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 500, color: "#CBD5E1" }}>{x}</span>
           ))}
         </div>
         <p style={{ fontFamily: "'Outfit',sans-serif", fontSize: 14, color: GRAY }}>
@@ -392,7 +278,7 @@ function Areas() {
 
 function CTA() {
   return (
-    <section style={{ background: `linear-gradient(180deg, ${DARK} 0%, rgba(244,114,182,0.08) 25%, rgba(125,211,252,0.04) 75%, ${DARK} 100%)`, padding: "80px 24px" }}>
+    <section style={{ background: `linear-gradient(135deg, ${PINK}22, ${BLUE}11)`, padding: "80px 24px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>🚛</div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,40px)", fontWeight: 700, color: LIGHT, margin: "0 0 12px" }}>Ready to Clear the Clutter?</h2>
@@ -409,48 +295,16 @@ function CTA() {
 }
 
 function Footer() {
-  const otherServices = [
-    { name: "Pressure Washing", desc: "Driveways, house exteriors, roofs & more", icon: "💦", url: "https://magiccitypressurewashingmiami.com" },
-    { name: "Mobile Detailing", desc: "Showroom-quality results at your door", icon: "✨", url: "https://magiccitydetailingmiami.com" },
-  ];
   return (
-    <>
-      <section style={{ background: `linear-gradient(180deg, ${DARK} 0%, #1A1035 30%, #1A1035 70%, ${DARK} 100%)`, padding: "60px 24px" }}>
-        <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 700, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>More from Magic City</div>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, fontWeight: 700, color: LIGHT, margin: "0 0 8px" }}>Explore All Our Services</h3>
-          <p style={{ fontFamily: "'Outfit',sans-serif", fontSize: 14, color: GRAY, marginBottom: 32 }}>One company. Three services. All of Miami-Dade covered.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16, marginBottom: 32 }}>
-            {otherServices.map(s => (
-              <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"
-                style={{ display: "block", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(244,114,182,0.12)", borderRadius: 16, padding: "24px 20px", textDecoration: "none", transition: "all 0.3s ease" }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = PINK; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "rgba(244,114,182,0.05)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(244,114,182,0.12)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}>
-                <div style={{ fontSize: 28, marginBottom: 8 }}>{s.icon}</div>
-                <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 16, fontWeight: 700, color: LIGHT, marginBottom: 4 }}>{s.name}</div>
-                <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 13, color: GRAY, marginBottom: 12 }}>{s.desc}</div>
-                <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 600, color: PINK }}>Learn More →</div>
-              </a>
-            ))}
-          </div>
-          <a href="https://magiccityservicesmiami.com" target="_blank" rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 32px", background: `linear-gradient(135deg, ${PINK}, #E04DA0)`, transition: "all 0.2s ease", borderRadius: 50, textDecoration: "none", fontFamily: "'Outfit',sans-serif", fontSize: 14, fontWeight: 700, color: "#fff", transition: "transform 0.2s, box-shadow 0.2s", boxShadow: "0 4px 20px rgba(244,114,182,0.3)" }}
-            onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.boxShadow = "0 6px 30px rgba(244,114,182,0.45)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(244,114,182,0.3)"; }}>
-            View All Magic City Services
-          </a>
+    <footer style={{ background: DARK, padding: "40px 24px 20px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 700, color: PINK }}>MAGIC CITY</div>
+          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 8, color: BLUE, letterSpacing: 2 }}>JUNK REMOVAL</div>
         </div>
-      </section>
-      <footer style={{ background: DARK, padding: "40px 24px 20px" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 700, color: PINK }}>MAGIC CITY</div>
-            <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 8, color: BLUE, letterSpacing: 2 }}>JUNK REMOVAL</div>
-          </div>
-          <span style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, color: "#475569" }}>© 2026 Magic City Services LLC — Licensed & Insured — Miami-Dade, FL</span>
-        </div>
-      </footer>
-    </>
+        <span style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, color: "#475569" }}>© 2026 Magic City Services LLC — Licensed & Insured — Miami-Dade, FL</span>
+      </div>
+    </footer>
   );
 }
 
@@ -464,72 +318,13 @@ const bookingPackages = [
     { name: "Full Truck Load", price: 549, desc: "Full truck — garage & estate cleanouts" },
     { name: "Complete Cleanout", price: 849, desc: "Multi-room / whole property cleanouts" },
 ];
-const timeSlots = [
-  { value: "7:00 AM", label: "7:00 AM — Early Bird (+$25)" },
-  { value: "7:15 AM", label: "7:15 AM — Early Bird (+$25)" },
-  { value: "7:30 AM", label: "7:30 AM — Early Bird (+$25)" },
-  { value: "7:45 AM", label: "7:45 AM — Early Bird (+$25)" },
-  { value: "8:00 AM", label: "8:00 AM" },
-  { value: "8:15 AM", label: "8:15 AM" },
-  { value: "8:30 AM", label: "8:30 AM" },
-  { value: "8:45 AM", label: "8:45 AM" },
-  { value: "9:00 AM", label: "9:00 AM" },
-  { value: "9:15 AM", label: "9:15 AM" },
-  { value: "9:30 AM", label: "9:30 AM" },
-  { value: "9:45 AM", label: "9:45 AM" },
-  { value: "10:00 AM", label: "10:00 AM" },
-  { value: "10:15 AM", label: "10:15 AM" },
-  { value: "10:30 AM", label: "10:30 AM" },
-  { value: "10:45 AM", label: "10:45 AM" },
-  { value: "11:00 AM", label: "11:00 AM" },
-  { value: "11:15 AM", label: "11:15 AM" },
-  { value: "11:30 AM", label: "11:30 AM" },
-  { value: "11:45 AM", label: "11:45 AM" },
-  { value: "12:00 PM", label: "12:00 PM" },
-  { value: "12:15 PM", label: "12:15 PM" },
-  { value: "12:30 PM", label: "12:30 PM" },
-  { value: "12:45 PM", label: "12:45 PM" },
-  { value: "1:00 PM", label: "1:00 PM" },
-  { value: "1:15 PM", label: "1:15 PM" },
-  { value: "1:30 PM", label: "1:30 PM" },
-  { value: "1:45 PM", label: "1:45 PM" },
-  { value: "2:00 PM", label: "2:00 PM" },
-  { value: "2:15 PM", label: "2:15 PM" },
-  { value: "2:30 PM", label: "2:30 PM" },
-  { value: "2:45 PM", label: "2:45 PM" },
-  { value: "3:00 PM", label: "3:00 PM" },
-  { value: "3:15 PM", label: "3:15 PM" },
-  { value: "3:30 PM", label: "3:30 PM" },
-  { value: "3:45 PM", label: "3:45 PM" },
-  { value: "4:00 PM", label: "4:00 PM" },
-  { value: "4:15 PM", label: "4:15 PM" },
-  { value: "4:30 PM", label: "4:30 PM" },
-  { value: "4:45 PM", label: "4:45 PM" },
-  { value: "5:00 PM", label: "5:00 PM" },
-  { value: "5:15 PM", label: "5:15 PM" },
-  { value: "5:30 PM", label: "5:30 PM" },
-  { value: "5:45 PM", label: "5:45 PM" },
-  { value: "6:00 PM", label: "6:00 PM — After Hours (+$25)" },
-  { value: "6:15 PM", label: "6:15 PM — After Hours (+$25)" },
-  { value: "6:30 PM", label: "6:30 PM — After Hours (+$25)" },
-  { value: "6:45 PM", label: "6:45 PM — After Hours (+$25)" },
-  { value: "7:00 PM", label: "7:00 PM — After Hours (+$25)" },
-  { value: "7:15 PM", label: "7:15 PM — After Hours (+$25)" },
-  { value: "7:30 PM", label: "7:30 PM — After Hours (+$25)" },
-  { value: "7:45 PM", label: "7:45 PM — After Hours (+$25)" },
-  { value: "8:00 PM", label: "8:00 PM — After Hours (+$25)" },
-  { value: "8:15 PM", label: "8:15 PM — After Hours (+$25)" },
-  { value: "8:30 PM", label: "8:30 PM — After Hours (+$25)" },
-  { value: "8:45 PM", label: "8:45 PM — After Hours (+$25)" },
-  { value: "9:00 PM", label: "9:00 PM — After Hours (+$25)" },
-];
+const timeSlots = ["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"];
 
-function BookingInput({ label, type, ...props }) {
-  const isDate = type === "date";
+function BookingInput({ label, ...props }) {
   return (
     <div style={{ marginBottom: 16 }}>
       <label style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: GRAY, letterSpacing: 1, textTransform: "uppercase", display: "block", marginBottom: 6 }}>{label}</label>
-      <input type={type} {...props} style={{ width: "100%", padding: isDate ? "13px 16px" : "13px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)", color: LIGHT, fontFamily: "'Outfit',sans-serif", fontSize: 15, outline: "none", boxSizing: "border-box", WebkitAppearance: "none", MozAppearance: "none", appearance: "none", colorScheme: "dark", minHeight: isDate ? 48 : "auto", ...props.style }}
+      <input {...props} style={{ width: "100%", padding: "13px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)", color: LIGHT, fontFamily: "'Outfit',sans-serif", fontSize: 15, outline: "none", boxSizing: "border-box", ...props.style }}
         onFocus={e => e.target.style.borderColor = "#7DD3FC55"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.08)"} />
     </div>
   );
@@ -545,24 +340,8 @@ function BookingSystem() {
   const [quoteSubmitted, setQuoteSubmitted] = useState(false);
 
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
-  const today = new Date();
-  const minDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
-  const isToday = form.date === minDate;
-  const nowHour = today.getHours();
-  const nowMin = today.getMinutes();
-  const getAvailableSlots = () => {
-    if (!isToday) return timeSlots;
-    return timeSlots.filter(t => {
-      const parts = t.value.match(/(\d+):(\d+)\s*(AM|PM)/);
-      if (!parts) return false;
-      let h = parseInt(parts[1]);
-      const m = parseInt(parts[2]);
-      const ampm = parts[3];
-      if (ampm === "PM" && h !== 12) h += 12;
-      if (ampm === "AM" && h === 12) h = 0;
-      return h > nowHour || (h === nowHour && m > nowMin);
-    });
-  };
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split("T")[0];
 
   const handleBooking = async () => {
     setSubmitting(true);
@@ -601,7 +380,7 @@ function BookingSystem() {
 
   if (submitted) {
     return (
-      <section id="book" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 30%, ${DARK2} 70%, ${DARK} 100%)`, padding: "80px 24px" }}>
+      <section id="book" style={{ background: DARK2, padding: "80px 24px" }}>
         <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center", background: DARK3, borderRadius: 24, padding: "44px 28px", border: "1px solid rgba(244,114,182,0.15)" }}>
           <div style={{ fontSize: 56, marginBottom: 20 }}>🎉</div>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 32, fontWeight: 700, color: LIGHT, margin: "0 0 12px" }}>Booking Confirmed!</h2>
@@ -619,7 +398,7 @@ function BookingSystem() {
   }
 
   return (
-    <section id="book" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 35%, ${DARK2} 65%, ${DARK} 100%)`, padding: "80px 24px" }}>
+    <section id="book" style={{ background: `linear-gradient(180deg, ${DARK} 0%, ${DARK2} 100%)`, padding: "80px 24px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: 12, fontWeight: 600, color: PINK, letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>Get Started</div>
@@ -635,7 +414,7 @@ function BookingSystem() {
 
         {/* ====== BOOK TAB ====== */}
         {tab === "book" && (
-          <div style={{ background: DARK3, borderRadius: 24, padding: "28px 32px", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
+          <div style={{ background: DARK3, borderRadius: 24, padding: "28px 28px", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
             {/* Progress */}
             <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
               {["Package", "Date & Time", "Your Info"].map((s, i) => (
@@ -678,13 +457,18 @@ function BookingSystem() {
                 <BookingInput label="Preferred Date" type="date" min={minDate} value={form.date} onChange={e => update("date", e.target.value)} />
                 <div style={{ marginBottom: 16 }}>
                   <label style={{ fontFamily: "'Outfit',sans-serif", fontSize: 11, fontWeight: 600, color: GRAY, letterSpacing: 1, textTransform: "uppercase", display: "block", marginBottom: 8 }}>Preferred Time</label>
-                  <select value={form.time} onChange={e => update("time", e.target.value)}
-                    style={{ width: "100%", padding: "13px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)", color: LIGHT, fontFamily: "'Outfit',sans-serif", fontSize: 15, outline: "none", boxSizing: "border-box", WebkitAppearance: "none", MozAppearance: "none", appearance: "none", colorScheme: "dark", cursor: "pointer", minHeight: 48 }}>
-                    <option value="" style={{ background: "#1E293B" }}>Select a time...</option>
-                    {getAvailableSlots().map(t => <option key={t.value} value={t.value} style={{ background: "#1E293B", color: "#F8FAFC" }}>{t.label}</option>)}
-                  </select>
-                  {form.time && (form.time.startsWith("7:") && form.time.includes("AM")) && <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 8, background: "rgba(125,211,252,0.08)", border: "1px solid rgba(125,211,252,0.15)", fontFamily: "'Outfit',sans-serif", fontSize: 12, color: "#7DD3FC" }}>Early Bird — $25 surcharge applies for service before 8 AM</div>}
-                  {form.time && (parseInt(form.time) >= 6 && form.time.includes("PM") && !form.time.startsWith("12:")) && <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 8, background: "rgba(244,114,182,0.08)", border: "1px solid rgba(244,114,182,0.15)", fontFamily: "'Outfit',sans-serif", fontSize: 12, color: "#F472B6" }}>After Hours — $25 surcharge applies for service after 6 PM</div>}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {timeSlots.map(t => (
+                      <button key={t} onClick={() => update("time", t)}
+                        style={{ padding: "9px 14px", borderRadius: 10, cursor: "pointer",
+                          background: form.time === t ? PINK : "rgba(255,255,255,0.03)",
+                          border: form.time === t ? "none" : "1px solid rgba(255,255,255,0.06)",
+                          color: form.time === t ? "#fff" : GRAY,
+                          fontFamily: "'Outfit',sans-serif", fontSize: 13, fontWeight: 500, transition: "all 0.15s" }}>
+                        {t}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <button onClick={() => { if (form.date && form.time) setStep(3); else alert("Please select a date and time."); }}
                   style={{ width: "100%", padding: "14px", borderRadius: 50, border: "none", background: (form.date && form.time) ? PINK : GRAY, color: "#fff", fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 700, cursor: "pointer", marginTop: 8 }}>
@@ -715,11 +499,11 @@ function BookingSystem() {
                 <BookingInput label="Full Name" type="text" placeholder="Your full name" value={form.name} onChange={e => update("name", e.target.value)} />
                 <BookingInput label="Phone" type="tel" placeholder="(305) 000-0000" value={form.phone} onChange={e => update("phone", e.target.value)} />
                 <BookingInput label="Email" type="email" placeholder="your@email.com" value={form.email} onChange={e => update("email", e.target.value)} />
-                <AddressAutocomplete label="Service Location" value={form.address} onChange={v => update("address", v)} placeholder="Start typing your address..." />
+                <BookingInput label="Service Address" type="text" placeholder="Where should we come?" value={form.address} onChange={e => update("address", e.target.value)} />
                 
                 <button onClick={handleBooking} disabled={submitting || !form.name || !form.phone || !form.email || !form.address}
                   style={{ width: "100%", padding: "15px", borderRadius: 50, border: "none",
-                    background: `linear-gradient(135deg, ${PINK}, #E04DA0)`, transition: "all 0.2s ease", color: "#fff",
+                    background: `linear-gradient(135deg, ${PINK}, #E04DA0)`, color: "#fff",
                     fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 700, cursor: "pointer", marginTop: 8, opacity: submitting ? 0.6 : 1 }}>
                   {submitting ? "Submitting..." : "Book Free On-Site Estimate"}
                 </button>
@@ -733,7 +517,7 @@ function BookingSystem() {
 
         {/* ====== QUOTE TAB ====== */}
         {tab === "quote" && (
-          <div style={{ background: DARK3, borderRadius: 24, padding: "28px 32px", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
+          <div style={{ background: DARK3, borderRadius: 24, padding: "28px 28px", border: "1px solid rgba(255,255,255,0.04)", overflow: "hidden" }}>
             {quoteSubmitted ? (
               <div style={{ textAlign: "center", padding: "40px 0" }}>
                 <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
@@ -763,7 +547,7 @@ function BookingSystem() {
                 </div>
                 <button type="submit" disabled={submitting}
                   style={{ width: "100%", padding: "15px", borderRadius: 50, border: "none",
-                    background: `linear-gradient(135deg, ${PINK}, #E04DA0)`, transition: "all 0.2s ease", color: "#fff",
+                    background: `linear-gradient(135deg, ${PINK}, #E04DA0)`, color: "#fff",
                     fontFamily: "'Outfit',sans-serif", fontSize: 15, fontWeight: 700, cursor: "pointer", marginTop: 8, opacity: submitting ? 0.6 : 1 }}>
                   {submitting ? "Sending..." : "Submit Quote Request"}
                 </button>
@@ -782,7 +566,7 @@ function BookingSystem() {
             </p>
             <a href={`tel:${PHONE.replace(/[^0-9]/g, "")}`} style={{
               display: "inline-flex", alignItems: "center", gap: 12, padding: "18px 44px",
-              background: `linear-gradient(135deg, ${PINK}, #E04DA0)`, transition: "all 0.2s ease", color: "#fff",
+              background: `linear-gradient(135deg, ${PINK}, #E04DA0)`, color: "#fff",
               borderRadius: 50, fontFamily: "'Outfit',sans-serif", fontSize: 22, fontWeight: 700,
               textDecoration: "none" }}>
               {PHONE}
@@ -818,25 +602,6 @@ export default function JunkRemovalPage() {
         @media (min-width: 769px) {
           .mobile-menu { display: none !important; }
         input, textarea, select, button { max-width: 100%; box-sizing: border-box; }
-        input[type="date"] { color-scheme: dark; -webkit-appearance: none; min-height: 48px; }
-        input[type="date"]::-webkit-date-and-time-value { text-align: left; padding: 2px 0; }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; padding: 4px; }
-        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%2394A3B8'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 16px center !important; }
-        select option { background: #1E293B; color: #F8FAFC; }
-        .pac-container { background: #1E293B !important; border: 1px solid rgba(244,114,182,0.15) !important; border-radius: 12px !important; margin-top: 4px !important; font-family: "Outfit", sans-serif !important; box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important; z-index: 99999 !important; padding: 4px 0 !important; }
-        .pac-item { padding: 10px 16px !important; border-top: 1px solid rgba(255,255,255,0.04) !important; color: #CBD5E1 !important; cursor: pointer !important; font-size: 14px !important; }
-        .pac-item:first-child { border-top: none !important; }
-        .pac-item:hover { background: rgba(244,114,182,0.08) !important; }
-        .pac-item-query { color: #F8FAFC !important; font-weight: 600 !important; }
-        .pac-matched { color: #F472B6 !important; }
-        .pac-icon { display: none !important; }
-        .pac-logo::after { display: none !important; }
-        .pac-item { padding: 10px 16px !important; border-top: 1px solid rgba(255,255,255,0.06) !important; color: #F8FAFC !important; cursor: pointer !important; font-size: 14px !important; }
-        .pac-item:hover { background: rgba(244,114,182,0.08) !important; }
-        .pac-item-query { color: #F472B6 !important; font-weight: 600 !important; }
-        .pac-matched { color: #7DD3FC !important; }
-        .pac-icon { display: none !important; }
-        .pac-item-selected { background: rgba(244,114,182,0.12) !important; }
         }
       `}</style>
       <Nav /><Hero /><WhatWeHaul /><Pricing /><BookingSystem /><Process /><Areas /><CTA /><Footer />
