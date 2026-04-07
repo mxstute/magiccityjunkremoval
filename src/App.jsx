@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AddressAutocomplete from "./AddressAutocomplete";
 
 /*
   MAGIC CITY JUNK REMOVAL — v3
@@ -357,7 +358,7 @@ export default function JunkRemovalSite() {
               <label style={labelStyle}>Email</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" style={{ ...inputStyle, marginBottom: "10px" }} />
               <label style={labelStyle}>Service Address</label>
-              <input type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder="Street, City, State, Zip Code" style={{ ...inputStyle, marginBottom: "20px" }} />
+              <AddressAutocomplete value={address} onChange={setAddress} placeholder="Street, City, State, Zip Code" inputStyle={{ ...inputStyle, marginBottom: "20px" }} />
 
               {selectedPackage && (
                 <div style={{
