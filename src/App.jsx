@@ -4,14 +4,14 @@ import AddressAutocomplete from "./AddressAutocomplete";
 /*
   MAGIC CITY JUNK REMOVAL — v3
   Layout: Hero → Booking (section 2) → Pricing → What We Haul → Areas → Footer
-  Deposit: $25 / $50 / $75
+  Deposit: 25% under $400, 50% over $400
   Phone: (786) 822-8281
 */
 
 const PACKAGES = [
-  { name: "Half Truck Load", price: "$299", deposit: 25, note: "Furniture, appliances, small cleanouts", tag: null },
-  { name: "Full Truck Load", price: "$549", deposit: 50, note: "Garage, storage unit, large hauls", tag: "Most Popular" },
-  { name: "Complete Cleanout", price: "$849+", deposit: 75, note: "Entire property / estate cleanout", tag: "Full Service" },
+  { name: "Half Truck Load", price: "$299", deposit: 75, note: "Furniture, appliances, small cleanouts", tag: null },
+  { name: "Full Truck Load", price: "$549", deposit: 275, note: "Garage, storage unit, large hauls", tag: "Most Popular" },
+  { name: "Complete Cleanout", price: "$849+", deposit: 425, note: "Entire property / estate cleanout", tag: "Full Service" },
 ];
 
 const HAUL_ITEMS = [
