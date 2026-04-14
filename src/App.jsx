@@ -23,6 +23,91 @@ const HAUL_ITEMS = [
   { icon: "🌳", name: "Yard Debris", desc: "Branches, stumps, landscaping waste" },
 ];
 
+const PACKAGE_SPECS = {
+  "Half Truck Load": {
+    time: "30-60 minutes on-site",
+    capacity: "Approximately 1-5 large items or equivalent volume",
+    items: [
+      "Professional crew arrival with commercial truck and equipment",
+      "Loading and hauling of all items (you point, we carry)",
+      "Furniture (couches, tables, chairs, desks, dressers, bed frames)",
+      "Mattresses and box springs",
+      "Small appliances (microwaves, vacuums, fans, printers)",
+      "Boxes, bags, and loose household items",
+      "Yard waste and debris (branches, clippings, soil bags)",
+      "Sweep of area after removal",
+      "Responsible disposal: recycling, donation, and landfill as appropriate",
+      "All labor, loading, transport, and dump fees included in price",
+    ],
+    idealFor: "Small garage cleanups, single-room clearouts, moving day leftovers, a few bulky items.",
+  },
+  "Full Truck Load": {
+    time: "1-2 hours on-site",
+    capacity: "Approximately 6-15 large items (full truck bed, ~8 cubic yards)",
+    tierUp: "Everything in Half Truck Load, PLUS:",
+    items: [
+      "Full truck bed capacity",
+      "Multiple rooms or areas in one trip",
+      "Large appliances (refrigerators, washers, dryers, dishwashers, stoves)",
+      "Exercise equipment (treadmills, ellipticals, weight benches)",
+      "Outdoor items (patio furniture, grills, swing sets, old fencing)",
+      "Electronics (TVs, monitors, computers — proper e-waste disposal)",
+      "Construction-light debris (drywall scraps, wood, tile, flooring)",
+      "Full sweep and cleanup of all removal areas",
+      "All labor, loading, transport, and dump fees included",
+    ],
+    idealFor: "Full garage cleanouts, apartment move-outs, estate cleanups, office furniture removal, single-room renovation debris.",
+  },
+  "Complete Cleanout": {
+    time: "2-5 hours on-site (may require multiple truck loads)",
+    capacity: "Entire property or large-scale removal",
+    tierUp: "Everything in Full Truck Load, PLUS:",
+    items: [
+      "Multiple truck loads as needed (no per-load upcharge within quoted scope)",
+      "Whole-home or whole-property cleanouts",
+      "Hoarder and heavy-volume situations",
+      "Full attic, basement, or storage unit clearouts",
+      "Shed and outbuilding cleanouts",
+      "Foreclosure and eviction cleanups",
+      "Estate and probate property cleanouts",
+      "Commercial space clearing (offices, warehouses, retail)",
+      "Post-renovation full debris removal",
+      "Sorting: salvageable items separated for donation when possible",
+      "Broom-clean finish of all cleared areas",
+      "All labor, loading, transport, and dump fees included",
+    ],
+    idealFor: "Full property cleanouts, estate liquidation, foreclosure turnovers, hoarder situations, commercial lease-end clearings.",
+    note: "Final price depends on total volume and number of truck loads required. Starting price of $849 covers up to 2 full truck loads. Phone or on-site estimate provided before work begins.",
+  },
+};
+
+const SPECIALTY_ITEMS = [
+  "Piano (upright or grand)",
+  "Hot tub / jacuzzi",
+  "Pool table",
+  "Safe (commercial or gun safe)",
+  "Concrete slabs or heavy masonry",
+  "Items requiring disassembly before removal",
+];
+
+const HAUL_CATEGORIES = [
+  { icon: "\u{1F6CB}\uFE0F", name: "Furniture", items: "Couches, loveseats, recliners, dining sets, desks, dressers, bookshelves, entertainment centers, bed frames, headboards, mattresses, box springs, futons, patio furniture" },
+  { icon: "\u{1F50C}", name: "Appliances", items: "Refrigerators, freezers, washers, dryers, dishwashers, stoves, ovens, microwaves, window AC units, water heaters, dehumidifiers" },
+  { icon: "\u{1F5A5}\uFE0F", name: "Electronics", items: "TVs, monitors, computers, printers, stereos, speakers, gaming consoles (proper e-waste disposal)" },
+  { icon: "\u{1F333}", name: "Yard & Outdoor", items: "Tree branches, shrubs, sod, soil, mulch, fencing, deck boards, swing sets, trampolines, grills, planters, landscaping debris" },
+  { icon: "\u{1F3D7}\uFE0F", name: "Construction Debris", items: "Drywall, lumber, tile, flooring, carpet, cabinetry, fixtures, doors, windows, roofing material" },
+  { icon: "\u{1F4E6}", name: "Miscellaneous", items: "Boxes, bags, totes, clothing, toys, sporting equipment, tools, garage clutter, storage unit contents, office supplies" },
+];
+
+const CANNOT_HAUL = [
+  "Chemicals, solvents, or liquid paint",
+  "Asbestos-containing materials",
+  "Medical or biohazard waste",
+  "Full propane tanks",
+  "Ammunition or firearms",
+  "Tires (refer to tire recycling)",
+];
+
 const AREAS = [
   "Miami Beach", "Brickell", "Coral Gables", "Kendall", "Doral", "Hialeah",
   "Coconut Grove", "Aventura", "Hollywood", "Fort Lauderdale", "Pembroke Pines",
@@ -53,6 +138,7 @@ export default function JunkRemovalSite() {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [hoveredArea, setHoveredArea] = useState(null);
+  const [expandedPkg, setExpandedPkg] = useState({});
 
   const selectedPackage = selectedPkg !== null ? PACKAGES[selectedPkg] : null;
   const depositAmount = selectedPackage ? selectedPackage.deposit : 0;
@@ -467,25 +553,84 @@ export default function JunkRemovalSite() {
       </section>
 
       {/* PRICING */}
-      <section style={{ padding: "50px 16px", background: "linear-gradient(180deg, #0B1120 0%, #131B2E 100%)" }}>
+      <section id="pricing" style={{ padding: "50px 16px", background: "linear-gradient(180deg, #0B1120 0%, #131B2E 100%)" }}>
         <div style={{ maxWidth: "600px", margin: "0 auto" }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "26px", textAlign: "center", marginBottom: "6px" }}>
             Transparent <span style={{ color: "#7DD3FC" }}>Pricing</span>
           </h2>
           <p style={{ textAlign: "center", fontSize: "13px", color: "#94A3B8", marginBottom: "24px" }}>No hidden fees. No surprises. Just honest pricing.</p>
-          {PACKAGES.map((pkg, i) => (
-            <div key={i} className="price-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", marginBottom: "8px", borderRadius: "12px", background: "rgba(30,41,59,0.4)", border: "1px solid rgba(148,163,184,0.08)" }}>
+          {PACKAGES.map((pkg, i) => {
+            const specs = PACKAGE_SPECS[pkg.name];
+            const isExpanded = expandedPkg[pkg.name];
+            return (
+              <div key={i} style={{ marginBottom: "10px" }}>
+                <div className="price-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", borderRadius: isExpanded ? "12px 12px 0 0" : "12px", background: "rgba(30,41,59,0.4)", border: "1px solid rgba(148,163,184,0.08)" }}>
+                  <div>
+                    <div style={{ fontSize: "15px", fontWeight: 600 }}>{pkg.name}</div>
+                    <div style={{ fontSize: "11px", color: "#94A3B8", marginTop: "2px" }}>{pkg.note}</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: "18px", fontWeight: 700, color: "#7DD3FC" }}>{pkg.price}</div>
+                    <div style={{ fontSize: "10px", color: "#22C55E", marginTop: "2px" }}>${pkg.deposit} deposit to book</div>
+                  </div>
+                </div>
+                {specs && (
+                  <>
+                    <button
+                      onClick={() => setExpandedPkg(prev => ({ ...prev, [pkg.name]: !prev[pkg.name] }))}
+                      style={{ width: "100%", padding: "10px 16px", border: "none", borderTop: "1px solid rgba(148,163,184,0.06)", background: "rgba(30,41,59,0.25)", color: "#F472B6", fontSize: "13px", fontWeight: 500, cursor: "pointer", fontFamily: "'Outfit', sans-serif", borderRadius: isExpanded ? "0" : "0 0 12px 12px", transition: "all 0.2s" }}
+                    >
+                      {isExpanded ? "Hide Details \u25B4" : "See What's Included \u25BE"}
+                    </button>
+                    <div style={{ maxHeight: isExpanded ? "1400px" : "0", overflow: "hidden", transition: "max-height 0.4s ease" }}>
+                      <div style={{ background: "rgba(244,114,182,0.04)", border: "1px solid rgba(244,114,182,0.12)", borderTop: "none", borderRadius: "0 0 10px 10px", padding: "16px" }}>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px" }}>
+                          <div style={{ display: "inline-block", padding: "4px 12px", borderRadius: "12px", background: "rgba(125,211,252,0.1)", border: "1px solid rgba(125,211,252,0.2)", fontSize: "11px", color: "#7DD3FC" }}>
+                            Estimated Time: {specs.time}
+                          </div>
+                          <div style={{ display: "inline-block", padding: "4px 12px", borderRadius: "12px", background: "rgba(125,211,252,0.1)", border: "1px solid rgba(125,211,252,0.2)", fontSize: "11px", color: "#7DD3FC" }}>
+                            Capacity: {specs.capacity}
+                          </div>
+                        </div>
+                        {specs.tierUp && (
+                          <p style={{ fontSize: "13px", color: "#F472B6", fontStyle: "italic", margin: "0 0 8px" }}>{specs.tierUp}</p>
+                        )}
+                        {specs.items.map((item, j) => (
+                          <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "4px" }}>
+                            <span style={{ color: "#22C55E", fontSize: "12px", lineHeight: "1.8", flexShrink: 0 }}>{"\u2713"}</span>
+                            <span style={{ fontSize: "13px", color: "#CBD5E1", lineHeight: 1.8 }}>{item}</span>
+                          </div>
+                        ))}
+                        {specs.idealFor && (
+                          <p style={{ fontSize: "12px", color: "#94A3B8", fontStyle: "italic", marginTop: "12px", marginBottom: 0 }}>Ideal for: {specs.idealFor}</p>
+                        )}
+                        {specs.note && (
+                          <p style={{ fontSize: "11px", color: "#94A3B8", fontStyle: "italic", marginTop: "8px", marginBottom: 0, lineHeight: 1.5 }}>{specs.note}</p>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+
+          <div style={{ marginTop: "20px", padding: "16px", borderRadius: "12px", background: "rgba(30,41,59,0.35)", border: "1px solid rgba(148,163,184,0.08)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
               <div>
-                <div style={{ fontSize: "15px", fontWeight: 600 }}>{pkg.name}</div>
-                <div style={{ fontSize: "11px", color: "#94A3B8", marginTop: "2px" }}>{pkg.note}</div>
+                <div style={{ fontSize: "14px", fontWeight: 600 }}>Specialty Items</div>
+                <div style={{ fontSize: "10px", color: "#94A3B8", marginTop: "2px" }}>Heavy item surcharge</div>
               </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: "18px", fontWeight: 700, color: "#7DD3FC" }}>{pkg.price}</div>
-                <div style={{ fontSize: "10px", color: "#22C55E", marginTop: "2px" }}>${pkg.deposit} deposit to book</div>
-              </div>
+              <div style={{ fontSize: "16px", fontWeight: 700, color: "#F472B6" }}>$50-$150/item</div>
             </div>
-          ))}
-          <p style={{ textAlign: "center", fontSize: "11px", color: "#94A3B8", marginTop: "12px" }}>Deposit secures your appointment. Remaining balance due after completed service. Call to book with no deposit.</p>
+            <div style={{ fontSize: "12px", color: "#94A3B8", lineHeight: 1.8 }}>
+              {SPECIALTY_ITEMS.map((item, i) => (
+                <div key={i}>{"\u2022"} {item}</div>
+              ))}
+            </div>
+          </div>
+
+          <p style={{ textAlign: "center", fontSize: "11px", color: "#94A3B8", marginTop: "16px" }}>Deposit secures your appointment. Remaining balance due after completed service. Call to book with no deposit.</p>
         </div>
       </section>
 
@@ -495,13 +640,21 @@ export default function JunkRemovalSite() {
           What We <span style={{ color: "#F472B6" }}>Haul</span>
         </h2>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", maxWidth: "500px", margin: "0 auto" }}>
-          {HAUL_ITEMS.map((item, i) => (
-            <div key={i} style={{ padding: "16px", borderRadius: "12px", background: "rgba(30,41,59,0.4)", border: "1px solid rgba(148,163,184,0.08)", textAlign: "center" }}>
-              <div className="info-icon" style={{ fontSize: "28px", marginBottom: "8px" }}>{item.icon}</div>
-              <div style={{ fontSize: "13px", fontWeight: 600, marginBottom: "4px" }}>{item.name}</div>
-              <div style={{ fontSize: "10px", color: "#94A3B8", lineHeight: 1.3 }}>{item.desc}</div>
+          {HAUL_CATEGORIES.map((cat, i) => (
+            <div key={i} style={{ padding: "16px", borderRadius: "12px", background: "rgba(30,41,59,0.4)", border: "1px solid rgba(148,163,184,0.08)" }}>
+              <div className="info-icon" style={{ fontSize: "28px", marginBottom: "8px", textAlign: "center" }}>{cat.icon}</div>
+              <div style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px", textAlign: "center" }}>{cat.name}</div>
+              <div style={{ fontSize: "10px", color: "#94A3B8", lineHeight: 1.5 }}>{cat.items}</div>
             </div>
           ))}
+        </div>
+
+        <div style={{ maxWidth: "500px", margin: "24px auto 0", padding: "16px", borderRadius: "12px", background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
+          <h4 style={{ fontSize: "13px", fontWeight: 600, color: "#EF4444", marginTop: 0, marginBottom: "8px" }}>Items We Cannot Haul</h4>
+          {CANNOT_HAUL.map((item, i) => (
+            <div key={i} style={{ fontSize: "12px", color: "#94A3B8", lineHeight: 1.8 }}>{"\u2022"} {item}</div>
+          ))}
+          <p style={{ fontSize: "11px", color: "#94A3B8", fontStyle: "italic", marginTop: "8px", marginBottom: 0 }}>If unsure whether an item qualifies, call us — we'll let you know before the crew arrives.</p>
         </div>
       </section>
 
