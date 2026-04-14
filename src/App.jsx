@@ -9,9 +9,9 @@ import AddressAutocomplete from "./AddressAutocomplete";
 */
 
 const PACKAGES = [
-  { name: "Half Truck Load", price: "$299", deposit: 75, note: "Furniture, appliances, small cleanouts", tag: null },
-  { name: "Full Truck Load", price: "$549", deposit: 275, note: "Garage, storage unit, large hauls", tag: "Most Popular" },
-  { name: "Complete Cleanout", price: "$849+", deposit: 425, note: "Entire property / estate cleanout", tag: "Full Service" },
+  { name: "Half Truck Load", price: "$400", deposit: 75, note: "Furniture, appliances, small cleanouts", tag: null },
+  { name: "Full Truck Load", price: "$750", deposit: 275, note: "Garage, storage unit, large hauls", tag: "Most Popular" },
+  { name: "Complete Cleanout", price: "$1,000+", deposit: 425, note: "Entire property / estate cleanout", tag: "Full Service" },
 ];
 
 const HAUL_ITEMS = [
@@ -77,7 +77,7 @@ const PACKAGE_SPECS = {
       "All labor, loading, transport, and dump fees included",
     ],
     idealFor: "Full property cleanouts, estate liquidation, foreclosure turnovers, hoarder situations, commercial lease-end clearings.",
-    note: "Final price depends on total volume and number of truck loads required. Starting price of $849 covers up to 2 full truck loads. Phone or on-site estimate provided before work begins.",
+    note: "Final price depends on total volume and number of truck loads required. Starting price of $1,000 covers up to 2 full truck loads. Phone or on-site estimate provided before work begins.",
   },
 };
 
