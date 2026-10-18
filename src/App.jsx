@@ -11,9 +11,12 @@ function trackPhoneClick() { if (typeof gtag === "function") gtag("event", "conv
 */
 
 const PACKAGES = [
+  { name: "Minimum Pickup", price: "$149", deposit: 40, note: "1-2 bulky items: couch, mattress, appliance", tag: null },
+  { name: "Quarter Truck Load", price: "$249", deposit: 65, note: "A few large items or a small pile", tag: null },
   { name: "Half Truck Load", price: "$400", deposit: 75, note: "Furniture, appliances, small cleanouts", tag: null },
+  { name: "Three-Quarter Truck Load", price: "$575", deposit: 150, note: "Multiple rooms or a packed garage", tag: null },
   { name: "Full Truck Load", price: "$750", deposit: 275, note: "Garage, storage unit, large hauls", tag: "Most Popular" },
-  { name: "Complete Cleanout", price: "$1,000+", deposit: 425, note: "Entire property / estate cleanout", tag: "Full Service" },
+  { name: "Complete Cleanout", price: "$1,350+", deposit: 425, note: "Entire property / estate cleanout (2 loads)", tag: "Full Service" },
 ];
 
 const HAUL_ITEMS = [
@@ -26,6 +29,43 @@ const HAUL_ITEMS = [
 ];
 
 const PACKAGE_SPECS = {
+  "Minimum Pickup": {
+    time: "15-30 minutes on-site",
+    capacity: "1-2 bulky items",
+    items: [
+      "Professional crew arrival with truck and equipment",
+      "Couch, mattress and box spring, recliner, dresser, or one appliance",
+      "Loading and hauling (you point, we carry)",
+      "Responsible disposal: recycling, donation, and landfill as appropriate",
+      "All labor, loading, transport, and dump fees included in price",
+    ],
+    idealFor: "A single couch or mattress, one old appliance, a couple of bulky items you can't fit in your car.",
+  },
+  "Quarter Truck Load": {
+    time: "20-45 minutes on-site",
+    capacity: "Approximately 1/4 of a truck (about 2-4 large items)",
+    items: [
+      "Professional crew arrival with truck and equipment",
+      "Furniture, mattresses, small appliances, boxes and bags",
+      "Yard waste and loose debris",
+      "Sweep of area after removal",
+      "All labor, loading, transport, and dump fees included in price",
+    ],
+    idealFor: "A few pieces of furniture, a small pile of boxes, a quick move-out leftover haul.",
+  },
+  "Three-Quarter Truck Load": {
+    time: "1-1.5 hours on-site",
+    capacity: "Approximately 3/4 of a truck (about 5-10 large items)",
+    tierUp: "Everything in Half Truck Load, PLUS:",
+    items: [
+      "Multiple rooms or areas in one trip",
+      "Large appliances (refrigerators, washers, dryers)",
+      "Patio furniture, grills, exercise equipment",
+      "Full sweep and cleanup of all removal areas",
+      "All labor, loading, transport, and dump fees included",
+    ],
+    idealFor: "A packed garage, a small apartment move-out, or a bedroom plus living room clearout.",
+  },
   "Half Truck Load": {
     time: "30-60 minutes on-site",
     capacity: "Approximately 1-5 large items or equivalent volume",
@@ -65,7 +105,7 @@ const PACKAGE_SPECS = {
     capacity: "Entire property or large-scale removal",
     tierUp: "Everything in Full Truck Load, PLUS:",
     items: [
-      "Multiple truck loads as needed (no per-load upcharge within quoted scope)",
+      "Up to 2 full truck loads included; additional loads $650 each",
       "Whole-home or whole-property cleanouts",
       "Hoarder and heavy-volume situations",
       "Full attic, basement, or storage unit clearouts",
@@ -79,13 +119,13 @@ const PACKAGE_SPECS = {
       "All labor, loading, transport, and dump fees included",
     ],
     idealFor: "Full property cleanouts, estate liquidation, foreclosure turnovers, hoarder situations, commercial lease-end clearings.",
-    note: "Final price depends on total volume and number of truck loads required. Starting price of $1,000 covers up to 2 full truck loads. Phone or on-site estimate provided before work begins.",
+    note: "Final price depends on total volume and number of truck loads required. Starting price of $1,350 covers up to 2 full truck loads; each additional load is $650. Phone or on-site estimate provided before work begins.",
   },
 };
 
 const SPECIALTY_ITEMS = [
   "Piano (upright or grand)",
-  "Hot tub / jacuzzi",
+  "Hot tub / jacuzzi (full removal quoted separately, from $400)",
   "Pool table",
   "Safe (commercial or gun safe)",
   "Concrete slabs or heavy masonry",
@@ -546,7 +586,7 @@ export default function JunkRemovalSite() {
               <div style={{ fontSize: "48px", marginBottom: "16px" }}>📞</div>
               <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", margin: "0 0 8px" }}>Call Us Directly</h3>
               <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "6px" }}>Speak with a team member right now</p>
-              <div style={{ display: "inline-block", padding: "6px 14px", borderRadius: "8px", marginBottom: "20px", background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.15)", fontSize: "12px", color: "#22C55E", fontWeight: 500 }}>No deposit required — book over the phone for free</div>
+              <div style={{ display: "inline-block", padding: "6px 14px", borderRadius: "8px", marginBottom: "20px", background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.15)", fontSize: "12px", color: "#22C55E", fontWeight: 500 }}>Free quotes by phone — call anytime, 24/7</div>
               <br />
               <a onClick={trackPhoneClick} href="tel:7868228281" style={{ display: "inline-block", padding: "14px 32px", borderRadius: "12px", background: "linear-gradient(135deg, #F472B6, #E04DA0)", color: "#fff", fontSize: "18px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>(786) 822-8281</a>
               <p style={{ fontSize: "12px", color: "#94A3B8", marginTop: "16px" }}>Available 7 AM – 9 PM, 7 days a week</p>
@@ -624,7 +664,7 @@ export default function JunkRemovalSite() {
                 <div style={{ fontSize: "14px", fontWeight: 600 }}>Specialty Items</div>
                 <div style={{ fontSize: "10px", color: "#94A3B8", marginTop: "2px" }}>Heavy item surcharge</div>
               </div>
-              <div style={{ fontSize: "16px", fontWeight: 700, color: "#F472B6" }}>$50-$150/item</div>
+              <div style={{ fontSize: "16px", fontWeight: 700, color: "#F472B6" }}>$75-$150/item</div>
             </div>
             <div style={{ fontSize: "12px", color: "#94A3B8", lineHeight: 1.8 }}>
               {SPECIALTY_ITEMS.map((item, i) => (
