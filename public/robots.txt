@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://magiccityjunkremovalmiami.com/sitemap.xml
+
+Sitemap: https://www.magiccityjunkremovalmiami.com/sitemap.xml

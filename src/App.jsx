@@ -216,9 +216,9 @@ export default function JunkRemovalSite() {
         </div>
       </section>
 
-      <Areas alt />
+      <Areas alt prefix="junk-removal" />
       <Band phone={PHONE} phoneDisplay={PHONE_DISPLAY} onQuote={() => { setTab("quote"); goTo("booking"); }} />
-      <Footer sub="Junk Removal" current="Junk Removal" phone={PHONE} phoneDisplay={PHONE_DISPLAY}
+      <Footer services={[["furniture-removal", "Furniture removal"], ["appliance-removal", "Appliance removal"], ["garage-cleanout", "Garage cleanouts"], ["estate-cleanout", "Estate cleanouts"], ["construction-debris-removal", "Construction debris"]]} sub="Junk Removal" current="Junk Removal" phone={PHONE} phoneDisplay={PHONE_DISPLAY}
         about="Magic City Junk Removal hauls furniture, appliances, debris and full cleanouts across South Florida with vetted, insured local crews. Part of Magic City Services." />
     </Page>
   );
